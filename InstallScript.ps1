@@ -19,6 +19,7 @@
 #Function to test if user is an administrator (required for script to work)
 #
 #
+$ProgressPreference = 'SilentlyContinue'
 function Test-Administrator  
 {  
     $user = [Security.Principal.WindowsIdentity]::GetCurrent();
