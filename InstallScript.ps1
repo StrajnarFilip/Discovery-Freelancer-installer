@@ -119,17 +119,21 @@ $disk=Mount-DiskImage -ImagePath (Get-Item .\Freelancer.iso).FullName
 Write-Host -ForegroundColor black -BackgroundColor green "Note: remember where you install the base Freelancer game as you will need to know to install Discovery"
 cd ((($disk | Get-Volume).DriveLetter) + ":")
 Start-Process .\SETUP.EXE -Wait
-.\DIRECTX\DXSETUP.EXE
+Start-Process .\DIRECTX\DXSETUP.EXE -Wait
 #
 #
 #And finally Discovery Freelancer installer:
 cd ~\DiscoveryFLtempDir
 Write-Host -ForegroundColor black -BackgroundColor white "Install Discovery Freelancer Launcher with provided GUI:"
 Start-Process .\discovery_4.91.0.1.exe -Wait
-Write-Host -ForegroundColor black -BackgroundColor white "You probably don't need the installer files anymore, delete them."
-cd ~
-Remove-Item -Path .\DiscoveryFLtempDir -Recurse
-
+$choice = Read-Host "If Discovery Freelancer installed successfully, you may choose to delete temporary files. Type yes, to delete them."
+if($choice -eq "yes")
+{
+    Write-Host "Deleting the temporary files." 
+    Dismount-DiskImage ($disk).ImagePath
+    cd ~
+    Remove-Item -Path .\DiscoveryFLtempDir -Recurse -Force
+}
 }
 else
 {
